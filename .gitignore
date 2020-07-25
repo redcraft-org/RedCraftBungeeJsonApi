@@ -1,6 +1,19 @@
 # Compiled class file
 *.class
 
+# Maven files
+.classpath
+.project
+
+# Target file
+target/
+
+# IDEs
+.settings
+.workspace
+.idea
+.vscode
+
 # Log file
 *.log
 

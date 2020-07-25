@@ -1,0 +1,14 @@
+#  ___        _  ___           __ _
+# | _ \___ __| |/ __|_ _ __ _ / _| |_   ___ _ _ __ _
+# |   / -_) _` | (__| '_/ _` |  _|  _|_/ _ \ '_/ _` |
+# |_|_\___\__,_|\___|_| \__,_|_|  \__(_)___/_| \__, |
+#                                              |___/
+#
+# A basic BungeeCord plugin to get stats about servers
+
+# This is the reported version when you ping the server
+# It's often used by ranking sites to check the server version
+reported-version: 'Minecraft 1.0'
+
+# This is your HTTP API port to query the JSON API
+http-api-port: 8000

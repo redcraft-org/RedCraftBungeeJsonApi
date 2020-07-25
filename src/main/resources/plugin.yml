@@ -1,0 +1,5 @@
+name: RedCraftBungeeJsonApi
+main: org.redcraft.redcraftbungeejsonapi.RedCraftBungeeJsonApi
+version: 0.0.1-SNAPSHOT
+author: RedCraft
+authors: [lululombard]
