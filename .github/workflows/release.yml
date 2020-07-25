@@ -35,7 +35,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.pom-version-extractor.outputs.version }}
-          release_name: Release ${{ steps.pom-version-extractor.outputs.version }}
+          release_name: ${{ steps.pom-name-extractor.outputs.name }} ${{ steps.pom-version-extractor.outputs.version }}
           draft: false
           prerelease: false
 

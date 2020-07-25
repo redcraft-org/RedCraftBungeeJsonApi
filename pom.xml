@@ -6,7 +6,7 @@
 
 	<groupId>org.redcraft.redcraftbungeejsonapi</groupId>
 	<artifactId>RedCraftBungeeJsonApi</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 
 	<repositories>
 		<repository>
