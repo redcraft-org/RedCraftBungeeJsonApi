@@ -12,16 +12,14 @@ import net.md_5.bungee.api.ServerPing;
 
 public class RedCraftBungeeJsonApi extends Plugin implements Listener {
 
-	private static String software_version = "Minecraft 1.0";
 	private static HttpApiServer http = null;
 	private static PlayerList scrap = null;
 
 	@Override
 	public void onEnable() {
-		Configuration config = YamlConfig.getConfig(this);
+		Config.readConfig(this);
 
-		software_version = config.getString("reported-version", software_version);
-		http = new HttpApiServer(config.getInt("http-api-port", 8000));
+		http = new HttpApiServer(Config.httpApiPort);
 		scrap = new PlayerList();
 		getProxy().getScheduler().schedule(this, scrap, 1, 5, TimeUnit.SECONDS);
 		getProxy().getPluginManager().registerListener(this, this);
@@ -30,7 +28,7 @@ public class RedCraftBungeeJsonApi extends Plugin implements Listener {
 	@EventHandler
 	public void onPing(ProxyPingEvent e) {
 		ServerPing packet = e.getResponse();
-		packet.getVersion().setName(software_version);
+		packet.getVersion().setName(Config.reportedVersion);
 		e.setResponse(packet);
 	}
 

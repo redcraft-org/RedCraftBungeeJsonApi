@@ -13,17 +13,22 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-public class YamlConfig {
+public class Config {
+
+	public static String reportedVersion;
+	public static int httpApiPort;
+
+	public static void readConfig(Plugin plugin) {
+		Configuration config = getConfig(plugin);
+		reportedVersion = config.getString("reported-version");
+		httpApiPort = config.getInt("http-api-port");
+	}
+
 	public static Configuration getConfig(Plugin plugin) {
-		Configuration configuration;
-		try {
-			configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(plugin.getDataFolder(), "config.yml"));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+		if (!plugin.getDataFolder().exists()) {
+			plugin.getDataFolder().mkdir();
 		}
 
-		if (!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdir();
 		File configFile = new File(plugin.getDataFolder(), "config.yml");
 		if (!configFile.exists()) {
 			try {
@@ -35,6 +40,14 @@ public class YamlConfig {
 			} catch (IOException e) {
 				throw new RuntimeException("Unable to create configuration file", e);
 			}
+		}
+
+		Configuration configuration;
+		try {
+			configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(plugin.getDataFolder(), "config.yml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
 		}
 		return configuration;
 	}
