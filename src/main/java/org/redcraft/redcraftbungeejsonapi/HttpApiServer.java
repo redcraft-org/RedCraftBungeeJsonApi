@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -25,10 +26,12 @@ public class HttpApiServer {
 
 class PlayersApiHandler implements HttpHandler {
 	@Override
-	public void handle(HttpExchange t) throws IOException {
+	public void handle(HttpExchange exchange) throws IOException {
 		String response = RedCraftBungeeJsonApi.getScraper().getOnlinePlayersJson();
-		t.sendResponseHeaders(200, response.length());
-		OutputStream os = t.getResponseBody();
+		Headers headers = exchange.getResponseHeaders();
+		headers.add("Content-Type", "application/json");
+		exchange.sendResponseHeaders(200, response.length());
+		OutputStream os = exchange.getResponseBody();
 		os.write(response.getBytes());
 		os.close();
 	}
