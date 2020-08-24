@@ -2,37 +2,47 @@ package org.redcraft.redcraftbungeejsonapi;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
+import org.redcraft.redcraftbungeejsonapi.routes.PlayersRoute;
+import org.redcraft.redcraftbungeejsonapi.routes.VersionsRoute;
+
+@SuppressWarnings("restriction")
 public class HttpApiServer {
 
-	HttpApiServer(int port) {
-		HttpServer server;
+	private HttpServer server;
+
+	HttpApiServer() {
 		try {
-			server = HttpServer.create(new InetSocketAddress(port), 0);
-			server.createContext("/players", new PlayersApiHandler());
+			InetAddress address = InetAddress.getByName(Config.httpApiBind);
+			InetSocketAddress socketAddress = new InetSocketAddress(address, Config.httpApiPort);
+			server = HttpServer.create(socketAddress, 0);
+			server.createContext("/players.json", new PlayersRoute());
+			server.createContext("/versions.json", new VersionsRoute());
 			server.setExecutor(null);
 			server.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-}
 
-class PlayersApiHandler implements HttpHandler {
-	@Override
-	public void handle(HttpExchange exchange) throws IOException {
-		String response = RedCraftBungeeJsonApi.getScraper().getOnlinePlayersJson();
+	public void stop() {
+		// Gracefully stop the server and give 1 second to handle current requests
+		server.stop(1);
+	}
+
+	static public void respondJson(HttpExchange exchange, String json) throws IOException {
 		Headers headers = exchange.getResponseHeaders();
 		headers.add("Content-Type", "application/json");
-		exchange.sendResponseHeaders(200, response.length());
+		headers.add("Cache-Control", "no-cache");
+		exchange.sendResponseHeaders(200, json.length());
 		OutputStream os = exchange.getResponseBody();
-		os.write(response.getBytes());
+		os.write(json.getBytes());
 		os.close();
 	}
 }
