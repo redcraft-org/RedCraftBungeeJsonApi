@@ -15,12 +15,27 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 public class Config {
 
+	public static boolean spoofReportedSoftware;
+	public static String reportedSoftware;
+
+	public static boolean spoofReportedVersion;
 	public static String reportedVersion;
+
+	public static boolean httpApiEnabled;
+	public static String httpApiBind;
 	public static int httpApiPort;
 
 	public static void readConfig(Plugin plugin) {
 		Configuration config = getConfig(plugin);
+
+		spoofReportedSoftware = config.getBoolean("spoof-reported-software");
+		reportedSoftware = config.getString("reported-software");
+
+		spoofReportedVersion = config.getBoolean("spoof-reported-version");
 		reportedVersion = config.getString("reported-version");
+
+		httpApiEnabled = config.getBoolean("http-api-enabled");
+		httpApiBind = config.getString("http-api-bind");
 		httpApiPort = config.getInt("http-api-port");
 	}
 

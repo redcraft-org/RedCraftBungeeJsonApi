@@ -1,4 +1,4 @@
-package org.redcraft.redcraftbungeejsonapi;
+package org.redcraft.redcraftbungeejsonapi.models;
 
 import java.util.UUID;
 

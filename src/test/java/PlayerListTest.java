@@ -3,8 +3,8 @@ import junit.framework.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import org.redcraft.redcraftbungeejsonapi.PlayerInfo;
-import org.redcraft.redcraftbungeejsonapi.PlayerList;
+import org.redcraft.redcraftbungeejsonapi.models.PlayerInfo;
+import org.redcraft.redcraftbungeejsonapi.runnables.PlayerList;
 
 public class PlayerListTest extends TestCase {
 	protected PlayerInfo fakePlayerInfo;

@@ -1,42 +1,53 @@
 package org.redcraft.redcraftbungeejsonapi;
 
-import net.md_5.bungee.api.event.ProxyPingEvent;
-import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.event.EventHandler;
 
 import java.util.concurrent.TimeUnit;
 
-import net.md_5.bungee.api.ServerPing;
+import org.redcraft.redcraftbungeejsonapi.runnables.PlayerList;
+import org.redcraft.redcraftbungeejsonapi.listeners.PingListener;
 
-public class RedCraftBungeeJsonApi extends Plugin implements Listener {
+public class RedCraftBungeeJsonApi extends Plugin {
 
-	private static HttpApiServer http = null;
-	private static PlayerList scrap = null;
+	private static Plugin instance;
+
+	private static HttpApiServer http;
+	private static PlayerList playerList;
+	private static PingListener pingListener;
 
 	@Override
 	public void onEnable() {
+		instance = this;
+
 		Config.readConfig(this);
 
-		http = new HttpApiServer(Config.httpApiPort);
-		scrap = new PlayerList();
-		getProxy().getScheduler().schedule(this, scrap, 1, 5, TimeUnit.SECONDS);
-		getProxy().getPluginManager().registerListener(this, this);
+		if (Config.httpApiEnabled) {
+			http = new HttpApiServer();
+		}
+		playerList = new PlayerList();
+		pingListener = new PingListener();
+		getProxy().getScheduler().schedule(this, playerList, 1, 5, TimeUnit.SECONDS);
+		getProxy().getPluginManager().registerListener(this, pingListener);
 	}
 
-	@EventHandler
-	public void onPing(ProxyPingEvent e) {
-		ServerPing packet = e.getResponse();
-		packet.getVersion().setName(Config.reportedVersion);
-		e.setResponse(packet);
+	@Override
+	public void onDisable() {
+		if (http != null) {
+			http.stop();
+		}
+		getProxy().getScheduler().cancel(this);
+		getProxy().getPluginManager().unregisterListeners(this);
 	}
 
 	static public HttpApiServer getHttpServer() {
 		return http;
 	}
 
-	static public PlayerList getScraper() {
-		return scrap;
+	static public PlayerList getPlayerList() {
+		return playerList;
+	}
+
+	static public Plugin getInstance() {
+		return instance;
 	}
 }
