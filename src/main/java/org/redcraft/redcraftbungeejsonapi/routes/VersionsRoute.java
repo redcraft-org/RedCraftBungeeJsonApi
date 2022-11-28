@@ -51,6 +51,13 @@ public class VersionsRoute implements HttpHandler {
 			supportedVersions = getAllSupportedViaVersion();
 		}
 
+		if (Config.spoofReportedVersion && !Config.reportedVersion.equalsIgnoreCase("ViaVersion")) {
+			mainVersion = Config.reportedVersion;
+			if (!supportedVersions.contains(mainVersion)) {
+				supportedVersions.add(mainVersion);
+			}
+		}
+
 		return new VersionInfo(serverSoftware, mainVersion, supportedVersions);
 	}
 
